@@ -13,3 +13,6 @@ def upload():
     f = request.files['file']
     f.save('/tmp/' + f.filename)
     return "Uploaded"
+
+@app.route('/eval')
+def insecure(): return eval(request.args.get('input'))
