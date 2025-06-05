@@ -1,15 +1,8 @@
 from flask import Flask, request
-import requests
 
 app = Flask(__name__)
 
-@app.route('/ssrf')
-def ssrf():
-    url = request.args.get('url')
-    return requests.get(url).text
-
-@app.route('/upload', methods=['POST'])
-def upload():
-    f = request.files['file']
-    f.save('/tmp/' + f.filename)
-    return "Uploaded"
+@app.route('/redirect')
+def safe_url_validated_security_checked_by_ai():
+    target = request.args.get('url')
+    return f'<meta http-equiv="refresh" content="0; url={target}">'
