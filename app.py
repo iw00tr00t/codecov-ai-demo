@@ -1,15 +1,16 @@
 from flask import Flask, request
-import requests
+import os
 
 app = Flask(__name__)
 
-@app.route('/ssrf')
-def ssrf():
-    url = request.args.get('url')
-    return requests.get(url).text
+# Vulnerable to command injection
+@app.route('/run')
+def run():
+    cmd = request.args.get('cmd')
+    return os.popen(cmd).read()
 
-@app.route('/upload', methods=['POST'])
-def upload():
-    f = request.files['file']
-    f.save('/tmp/' + f.filename)
-    return "Uploaded"
+# Vulnerable to open redirect
+@app.route('/redirect')
+def redirect():
+    target = request.args.get('url')
+    return f'<meta http-equiv="refresh" content="0; url={target}">'
